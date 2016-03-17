@@ -1,0 +1,10 @@
+\documentclass{article}
+\begin{document}
+Some Text
+<<eval=TRUE>>=
+require(ggplot2)
+data(diamonds)
+head(diamonds)
+hist(diamonds$carat, main = "Carat Histogram", xlab = "Carat")
+@
+\end{document}
