@@ -72,10 +72,15 @@ Some Text
 ## 6  0.24 Very Good     J    VVS2  62.8    57   336 3.94 3.96 2.48
 \end{verbatim}
 \begin{alltt}
-\hlkwd{hist}\hlstd{(diamonds}\hlopt{$}\hlstd{carat,} \hlkwc{main} \hlstd{=} \hlstr{"Carat Histogram"}\hlstd{,} \hlkwc{xlab} \hlstd{=} \hlstr{"Carat"}\hlstd{)}
+\hlkwd{hist}\hlstd{(diamonds}\hlopt{$}\hlstd{price,} \hlkwc{main} \hlstd{=} \hlstr{"Carat Histogram"}\hlstd{,} \hlkwc{xlab} \hlstd{=} \hlstr{"Price"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-1-1} 
+\begin{kframe}\begin{alltt}
+\hlkwd{plot}\hlstd{(price} \hlopt{~} \hlstd{carat,} \hlkwc{data} \hlstd{= diamonds)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-1-2} 
 
 \end{knitrout}
 \end{document}

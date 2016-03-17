@@ -5,6 +5,7 @@ Some Text
 require(ggplot2)
 data(diamonds)
 head(diamonds)
-hist(diamonds$carat, main = "Carat Histogram", xlab = "Carat")
+hist(diamonds$price, main = "Carat Histogram", xlab = "Price")
+plot(price ~ carat, data = diamonds)
 @
 \end{document}
