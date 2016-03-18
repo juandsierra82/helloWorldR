@@ -1,11 +1,31 @@
 \documentclass{article}
 \begin{document}
 Some Text
-<<eval=TRUE>>=
+<<>>=
+require('RPostgreSQL')
 require(ggplot2)
-data(diamonds)
-head(diamonds)
-hist(diamonds$price, main = "Carat Histogram", xlab = "Price")
-plot(price ~ carat, data = diamonds)
+require(plyr)
+pw <- {
+  'kempchee'
+}
+name <- {
+ 'customer_security_assessment_development' 
+}
+usr <-{
+  'kempchee'
+}
+drv <- dbDriver("PostgreSQL")
+
+con <-dbConnect(drv, dbname = name, host = 'localhost', port = 5432, user= usr, password = pw)
+dbExistsTable(con, "declarations")
+
+questionsTable <- dbGetQuery(con, "SELECT category_id, score, risk_value FROM questions")
+#sorted_questions <- arrange(questionsTable, category_id, risk_value)
+#head(sorted_questions)
+#ques_sum <- ddply(sorted_questions, "category_id", transform, label_ypos=count(risk_value))
+#head(ques_sum)
+ggplot(data=questionsTable, aes(x=factor(category_id), fill=factor(risk_value)), label='count') + geom_bar(stat="count", width =.7, color="grey", position=position_dodge()) + scale_fill_brewer(palette="Blues")+xlab('Category')+labs(fill="Risk Level")
+
 @
 \end{document}
+

@@ -54,33 +54,68 @@ Some Text
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
+\hlkwd{require}\hlstd{(}\hlstr{'RPostgreSQL'}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: RPostgreSQL}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: DBI}}\begin{alltt}
 \hlkwd{require}\hlstd{(ggplot2)}
 \end{alltt}
 
 
 {\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: ggplot2}}\begin{alltt}
-\hlkwd{data}\hlstd{(diamonds)}
-\hlkwd{head}\hlstd{(diamonds)}
+\hlkwd{require}\hlstd{(plyr)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: plyr}}\begin{alltt}
+\hlstd{pw} \hlkwb{<-} \hlstd{\{}
+  \hlstr{'kempchee'}
+\hlstd{\}}
+\hlstd{name} \hlkwb{<-} \hlstd{\{}
+ \hlstr{'customer_security_assessment_development'}
+\hlstd{\}}
+\hlstd{usr} \hlkwb{<-}\hlstd{\{}
+  \hlstr{'kempchee'}
+\hlstd{\}}
+\hlstd{drv} \hlkwb{<-} \hlkwd{dbDriver}\hlstd{(}\hlstr{"PostgreSQL"}\hlstd{)}
+
+\hlstd{con} \hlkwb{<-}\hlkwd{dbConnect}\hlstd{(drv,} \hlkwc{dbname} \hlstd{= name,} \hlkwc{host} \hlstd{=} \hlstr{'localhost'}\hlstd{,} \hlkwc{port} \hlstd{=} \hlnum{5432}\hlstd{,} \hlkwc{user}\hlstd{= usr,} \hlkwc{password} \hlstd{= pw)}
+\hlkwd{dbExistsTable}\hlstd{(con,} \hlstr{"declarations"}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-##   carat       cut color clarity depth table price    x    y    z
-## 1  0.23     Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
-## 2  0.21   Premium     E     SI1  59.8    61   326 3.89 3.84 2.31
-## 3  0.23      Good     E     VS1  56.9    65   327 4.05 4.07 2.31
-## 4  0.29   Premium     I     VS2  62.4    58   334 4.20 4.23 2.63
-## 5  0.31      Good     J     SI2  63.3    58   335 4.34 4.35 2.75
-## 6  0.24 Very Good     J    VVS2  62.8    57   336 3.94 3.96 2.48
+## [1] TRUE
 \end{verbatim}
 \begin{alltt}
-\hlkwd{hist}\hlstd{(diamonds}\hlopt{$}\hlstd{price,} \hlkwc{main} \hlstd{=} \hlstr{"Carat Histogram"}\hlstd{,} \hlkwc{xlab} \hlstd{=} \hlstr{"Price"}\hlstd{)}
+\hlstd{questionsTable} \hlkwb{<-} \hlkwd{dbGetQuery}\hlstd{(con,} \hlstr{"SELECT category_id, score, risk_value FROM questions"}\hlstd{)}
+\hlstd{sorted_questions} \hlkwb{<-} \hlkwd{arrange}\hlstd{(questionsTable, category_id, risk_value)}
+\hlkwd{head}\hlstd{(sorted_questions)}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-1-1} 
-\begin{kframe}\begin{alltt}
-\hlkwd{plot}\hlstd{(price} \hlopt{~} \hlstd{carat,} \hlkwc{data} \hlstd{= diamonds)}
+\begin{verbatim}
+##   category_id score risk_value
+## 1           1     0      Least
+## 2           1     0      Least
+## 3           1     0      Least
+## 4           1     1    Minimal
+## 5           1     1    Minimal
+## 6           1     1    Minimal
+\end{verbatim}
+\begin{alltt}
+\hlstd{ques_sum} \hlkwb{<-} \hlkwd{ddply}\hlstd{(sorted_questions,} \hlstr{"category_id"}\hlstd{, transform,} \hlkwc{label_ypos}\hlstd{=}\hlkwd{count}\hlstd{(risk_value))}
 \end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-1-2} 
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in data.frame(structure(list(category\_id = c(1L, 1L, 1L, 1L, 1L, : arguments imply differing number of rows: 14, 5}}\begin{alltt}
+\hlkwd{head}\hlstd{(ques_sum)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in head(ques\_sum): object 'ques\_sum' not found}}\begin{alltt}
+\hlcom{#ggplot(data=questionsTable, aes(x=factor(category_id), fill=factor(risk_value)), label='count') + geom_bar(stat="count", width =.7, color="grey", position=position_dodge()) + scale_fill_brewer(palette="Blues")}
+\end{alltt}
+\end{kframe}
 \end{knitrout}
 \end{document}
+
